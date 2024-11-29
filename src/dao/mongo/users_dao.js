@@ -1,4 +1,4 @@
-import { userModel } from "./models/user.model.js";
+const { userModel } = require("./models/user.model.js");
 
 class UserDao {
   async getAll() {
@@ -34,4 +34,5 @@ class UserDao {
   }
 }
 
-export const userDao = new UserDao();
+// Exportación del objeto
+module.exports = { userDao: new UserDao() };
