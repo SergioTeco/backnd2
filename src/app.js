@@ -4,7 +4,7 @@ import express from "express";
 const session = require('express-session');
 import { Server } from "socket.io";
 const passport = require('./config/passport'); // Estrategia local
-import { connectMongoDB } from "./config/mongoDB.js";
+import { connectMongoDB } from "./config/mondoDB.js";
 //import session from "express-session";
 //const authRoutes = require('./routes/session-local');
 //const jwtAuthRoutes = require('./routes/auth-jwt'); 
