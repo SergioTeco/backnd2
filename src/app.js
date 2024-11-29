@@ -34,4 +34,12 @@ app.use(passport.session());
 app.use(routes);
 
 const httpServer = app.listen(8080, () => {
-  console.log("Serv
+  console.log("Servidor escuchando en el puerto 8080");
+});
+
+// Configuración de Socket.io
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+  console.log("Nuevo usuario Conectado");
+});
