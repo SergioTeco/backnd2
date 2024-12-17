@@ -54,7 +54,8 @@ class CartService {
 
     let total = 0;
 
-    const products = [];
+    const productsNotProcessed = [];
+    const processedProducts = [];
 
     for (const productCart of cart.products) {
       const prod = await productDao.getById(productCart.product);
@@ -64,15 +65,28 @@ class CartService {
         
         prod.stock = prod.stock - productCart.quantity;
         await productDao.update(prod._id, { stock: prod.stock });
+
+        // Guardamos el producto procesado en el array
+        processedProducts.push(productCart);
+
       } else {
-        products.push(productCart);
+        productsNotProcessed.push(prod._id);
       }
 
     }
-    await cartDao.update(id, { products });
+    await cartDao.update(id, { 
+        products: productsNotProcessed.map(productId => {
+          // Devolver solo los productos no procesados
+          return { product: productId, quantity: 1 }; // Asumimos que la cantidad será 1 para los no procesados
+        })
+      });
     
-    if (products.length === cart.products.length) {
-        throw new Error('No hay suficiente stock para ninguno de los productos');
+    if (productsNotProcessed.length > 0) {
+        return {
+          status: 'error',
+          msg: 'No todos los productos pudieron ser comprados debido a falta de stock',
+          productsNotProcessed
+        };
       }
 
     return total;
