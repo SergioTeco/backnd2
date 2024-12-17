@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 require('../config/passport'); // Estrategia Local (Login)
 require('../config/passport-register'); // Estrategia de Registro
-const UserDAO = require('../dao/user_dao');
-
+//const UserDAO = require('../dao/user_dao');
+const UserRepository = require('../dao/mongo/models/repository/user_repository'); // Cambié a repository
 const router = express.Router();
 
 // Ruta de registro
@@ -12,22 +12,22 @@ router.post('/register', async (req, res) => {
   const { first_name, last_name, email, password, age } = req.body;
 
   try {
-    const existingUser = await UserDAO.findByEmail(email);
+    const existingUser = await UserRepository.findByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: 'El usuario ya existe' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
+    const newUser = {
       first_name,
       last_name,
       email,
       password: hashedPassword,
       age,
-    });
+    };
 
-    const savedUser = await UserDAO.createUser(newUser);
+    const savedUser = await UserDAO.UserRepository.create(newUser);
     res.status(201).json({ message: 'Usuario registrado exitosamente' , user: savedUser});
   } catch (error) {
     res.status(500).json({ message: 'Error al registrar usuario', error });

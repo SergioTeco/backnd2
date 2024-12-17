@@ -2,7 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const UserDAO = require('../dao/mongo/users_dao');
+//const UserDAO = require('../dao/mongo/users_dao');
+const UserRepository = require('../dao/mongo/models/repository/user_repository'); // Cambié a repository
 
 // Configuración de JWT
 const JWT_SECRET = 'mi_secreto'; // Usa variables de entorno
@@ -16,7 +17,9 @@ router.post('/login', async (req, res) => {
 
   try {
     // Buscar al usuario por email
-    const user = await UserDAO.findByEmail(email);
+    const user = await UserRepository.findByEmail(email); 
+    
+    //const user = await UserDAO.findByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
