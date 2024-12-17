@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'], // Solo 'user' o 'admin'
+    default: 'user'
+  }
 });
 
 // Middleware `pre` para hashear el password antes de guardar
