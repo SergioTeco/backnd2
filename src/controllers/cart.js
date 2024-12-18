@@ -1,14 +1,11 @@
-import { cartDao } from "../dao/mongo/cart.js";
-import { productDao } from "../dao/mongo/product.dao.js";
-import { cartService } from "../services/carts.js";
-import { productService } from "../services/product.js";
-import { ticketService } from "../services/ticket.js";
+const { cartService } = require("../services/carts.js");
+const { productService } = require("../services/product.js");
+const { ticketService } = require("../services/ticket.js");
 
-export class CartController {
+class CartController {
   async createCart(req, res) {
     try {
       const cart = await cartService.createCart();
-
       res.status(201).json({ status: "success", cart });
     } catch (error) {
       console.log(error);
@@ -56,7 +53,6 @@ export class CartController {
       if (!cart) return res.status(404).json({ status: "Error", msg: `No se encontró el carrito con el id ${cid}` });
 
       const cartUpdate = await cartService.deleteProductToCart(cid, pid);
-
       res.status(200).json({ status: "success", payload: cartUpdate });
     } catch (error) {
       console.log(error);
@@ -76,7 +72,6 @@ export class CartController {
       if (!cart) return res.status(404).json({ status: "Error", msg: `No se encontró el carrito con el id ${cid}` });
 
       const cartUpdate = await cartService.updateQuantityProductInCart(cid, pid, Number(quantity));
-
       res.status(200).json({ status: "success", payload: cartUpdate });
     } catch (error) {
       console.log(error);
@@ -116,4 +111,4 @@ export class CartController {
   }
 }
 
-export const cartController = new CartController();
+module.exports = new CartController(); // Exportamos la instancia de CartController

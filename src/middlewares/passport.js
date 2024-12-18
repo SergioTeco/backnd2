@@ -1,5 +1,5 @@
-import { request, response } from "express";
-import passport from "passport";
+const { request, response } = require('express');
+const { passport } = require('passport');
 
 export const passportCall = (strategy) => {
   return async (req = request, res = response, next) => {
@@ -12,3 +12,5 @@ export const passportCall = (strategy) => {
     })(req, res, next);
   };
 };
+
+module.exports = { passportCall };

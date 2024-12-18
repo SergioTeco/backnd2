@@ -1,4 +1,4 @@
-import { productModel } from "./models/product.js";
+const { productModel } = require("./models/product.js");
 
 class ProductDao {
   async getAll(query, options) {
@@ -27,4 +27,6 @@ class ProductDao {
   }
 }
 
-export const productDao = new ProductDao();
+const productDao = new ProductDao();
+
+module.exports = { productDao };

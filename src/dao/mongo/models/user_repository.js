@@ -1,5 +1,5 @@
-import { UserDTO } from "../dto/user.dto.js";
-import { userModel } from "./models/users.js";
+const { UserDTO } = require("../dto/user.dto.js");
+const { userModel } = require("./models/users.js");
 
 class UserRepository {
   async getAll() {
@@ -37,4 +37,6 @@ class UserRepository {
   }
 }
 
-export const userRepository = new UserRepository();
+const userRepository = new UserRepository();
+
+module.exports = { userRepository };

@@ -1,4 +1,4 @@
-import { ticketModel } from "./models/ticket.js";
+const { ticketModel } = require("./models/ticket.js");
 
 class TicketDao {
   async getAll() {
@@ -34,4 +34,6 @@ class TicketDao {
   }
 }
 
-export const ticketDao = new TicketDao();
+const ticketDao = new TicketDao();
+
+module.exports = { ticketDao };

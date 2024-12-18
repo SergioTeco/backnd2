@@ -1,4 +1,4 @@
-import { cartModel } from "./models/cart.js";
+const { cartModel } = require("./models/cart.js");
 
 class CartDao {
   // Método para obtener todos los carritos
@@ -32,4 +32,6 @@ class CartDao {
   }
 }
 
-export const cartDao = new CartDao();
+const cartDao = new CartDao();  //constante tipo objeto
+
+module.exports = { cartDao };
