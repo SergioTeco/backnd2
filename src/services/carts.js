@@ -1,5 +1,5 @@
-import { cartDao } from "../dao/mongo/cart.js";
-import { productDao } from "../dao/mongo/product.js";
+const { cartDao } = require("../dao/mongo/cart.js");
+const { productDao } = require("../dao/mongo/product.js");
 
 class CartService {
   async createCart() {
@@ -28,6 +28,7 @@ class CartService {
   }
 
   async deleteProductToCart(cid, pid) {
+    const cart = await cartDao.getById(cid);
     const products = cart.products.filter((prod) => prod.product != pid);
 
     return await cartDao.update(cid, { products });
@@ -62,7 +63,7 @@ class CartService {
 
       if (prod.stock >= productCart.quantity) {
         total += prod.price * productCart.quantity;
-        
+
         prod.stock = prod.stock - productCart.quantity;
         await productDao.update(prod._id, { stock: prod.stock });
 
@@ -72,27 +73,27 @@ class CartService {
       } else {
         productsNotProcessed.push(prod._id);
       }
-
     }
-    await cartDao.update(id, { 
-        products: productsNotProcessed.map(productId => {
-          // Devolver solo los productos no procesados
-          return { product: productId, quantity: 1 }; // Asumimos que la cantidad será 1 para los no procesados
-        })
-      });
-    
+
+    await cartDao.update(id, {
+      products: productsNotProcessed.map(productId => {
+        // Devolver solo los productos no procesados
+        return { product: productId, quantity: 1 }; // Asumimos que la cantidad será 1 para los no procesados
+      })
+    });
+
     if (productsNotProcessed.length > 0) {
-        return {
-          status: 'error',
-          msg: 'No todos los productos pudieron ser comprados debido a falta de stock',
-          productsNotProcessed
-        };
-      }
+      return {
+        status: 'error',
+        msg: 'No todos los productos pudieron ser comprados debido a falta de stock',
+        productsNotProcessed
+      };
+    }
 
     return total;
-  }  catch (error) {
-    throw new Error(error.message || 'Error al procesar la compra');
   }
 }
 
-export const cartService = new CartService();
+const cartService = new CartService();
+
+module.exports = { cartService };

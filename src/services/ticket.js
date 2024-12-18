@@ -1,6 +1,6 @@
-import { v4 as uuid } from "uuid";
-import { ticketDao } from "../dao/mongo/ticket.js";
-import { sendTicketMail } from "../utils/sendEmail.js";
+const { v4: uuid } = require("uuid");
+const { ticketDao } = require("../dao/mongo/ticket.js");
+const { sendTicketMail } = require("../utils/sendEmail.js");
 
 class TicketService {
   async create(amount, userMail) {
@@ -8,11 +8,13 @@ class TicketService {
       code: uuid(),
       purchaser: userMail,
       amount,
-    }
+    };
     const ticket = await ticketDao.create(newTicket);
     await sendTicketMail(userMail, ticket);
     return ticket;
   }
 }
 
-export const ticketService = new TicketService();
+const ticketService = new TicketService();
+
+module.exports = { ticketService };

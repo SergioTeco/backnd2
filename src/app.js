@@ -1,10 +1,10 @@
-import express from "express";
+const express = require('express');
 //import routes from "./routes/index.js";
 //import __dirname from "./dirname.js";
 const session = require('express-session');
-import { Server } from "socket.io";
+const Server = require ('socket.io');
 const passport = require('./config/passport'); // Estrategia local
-import { connectMongoDB } from "./config/mongoDB.js";
+const connectMongoDB = require ('./config/mongoDB.js');
 //import session from "express-session";
 //const authRoutes = require('./routes/session-local');
 //const jwtAuthRoutes = require('./routes/auth-jwt'); 
@@ -25,7 +25,7 @@ app.use(express.json());
 //config de sesion estrategia local
 app.use(
   session({
-    secret: "secret",
+    secret: APP_SESSION_SECRET,
     resave: true, // Mantiene la session activa, si esto est el false la session se cierra
     saveUninitialized: true, // Guarde la sesion
   })
@@ -40,7 +40,7 @@ app.use(passport.session());
 //app.use('/auth-jwt', jwtAuthRoutes );
 app.use(routes);
 
-const httpServer = app.listen(8080, () => {
+const httpServer = app.listen(PORT, () => {
   console.log("Servidor escuchando en el puerto 8080");
 });
 

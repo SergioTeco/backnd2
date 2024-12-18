@@ -1,5 +1,5 @@
-import { productDao } from "../dao/mongo/product.js";
-import { ProductResponseDto } from "../dto/productResponse.dto.js";
+const { productDao } = require("../dao/mongo/product.js");
+const { ProductResponseDto } = require("../dto/productResponse.dto.js");
 
 class ProductService {
   async getAll(query, options) {
@@ -8,14 +8,14 @@ class ProductService {
 
   async getById(id) {
     const product = await productDao.getById(id);
-    if(!product) return null;
+    if (!product) return null;
     const productFormat = new ProductResponseDto(product);
     return productFormat;
   }
 
   async deleteOne(id) {
     const product = await productDao.getById(id);
-    if(!product) return null;
+    if (!product) return null;
     await productDao.deleteOne(id);
     return true;
   }
@@ -25,4 +25,6 @@ class ProductService {
   async create(data) {}
 }
 
-export const productService = new ProductService();
+const productService = new ProductService();
+
+module.exports = { productService };
