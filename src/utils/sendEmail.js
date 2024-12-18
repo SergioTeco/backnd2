@@ -1,20 +1,35 @@
 const nodemailer = require('nodemailer'); // Usamos require para nodemailer
 const envsConfig = require('../config/envs.config.js'); // Usamos require para cargar el archivo de configuración
+const { google } = require('googleapis'); 
+const OAuth2 = google.auth.OAuth2;
 
-// Función para enviar el correo de bienvenida
+const oauth2Client = new OAuth2(
+  'GOOGLE_CLIENT_ID', 
+  'GOOGLE_CLIENT_SECRET', 
+  'https://developers.google.com/oauthplayground' // Redireccionamiento, puedes usar la URL del playground de Google para pruebas
+);
+
+oauth2Client.setCredentials({
+  refresh_token: 'REFRESH_TOKEN' 
+});
+
+const accessToken = await oauth2Client.getAccessToken();
+
 const sendMail = async (name, subject, to) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
-    port: 587,
+    service: 'gmail',
     auth: {
-      user: "barrientossergio23@gmail.com",
-      pass: envsConfig.GMAIL_PASS, // revisa que esta variable esté correctamente configurada
-    },
+      type: 'OAuth2',
+      user: 'barrientossergio23@gmail.com', 
+      clientId: 'GOOGLE_CLIENT_ID',
+      clientSecret: 'GOOGLE_CLIENT_SECRET',
+      refreshToken: 'REFRESH_TOKEN',
+      accessToken: accessToken
+    }
   });
 
-  // Configuramos el envío del correo electrónico
   await transporter.sendMail({
-    from: "barrientossergio23@gmail.com",
+    from: 'barrientossergio23@gmail.com',
     to: to,
     subject: subject,
     html: `<h1>Bienvenido ${name}</h1>
@@ -24,11 +39,16 @@ const sendMail = async (name, subject, to) => {
 </div>`,
     attachments: [
       {
-        filename: "gatito.jpg",
-        path: "public/images/gatito.jpg",
-        cid: "gatito",
+        filename: 'gatito.jpg',
+        path: 'public/images/gatito.jpg',
+        cid: 'gatito',
       },
     ],
+  }, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message sent: %s', info.messageId);
   });
 };
 
@@ -36,10 +56,13 @@ const sendMail = async (name, subject, to) => {
 const sendTicketMail = async (to, ticket) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
-    port: 587,
     auth: {
-      user: "profeluismeradev@gmail.com",
-      pass: envsConfig.GMAIL_PASS,
+      type: 'OAuth2',
+      user: 'barrientossergio23@gmail.com', 
+      clientId: 'GOOGLE_CLIENT_ID',
+      clientSecret: 'GOOGLE_CLIENT_SECRET',
+      refreshToken: 'REFRESH_TOKEN',
+      accessToken: accessToken
     },
   });
 
