@@ -7,7 +7,8 @@ module.exports = {
   MONGO_URL: process.env.MONGO_URL,
   //SECRET_KEY: process.env.SECRET_KEY,
   //JWT_KEY: process.env.JWT_KEY,
-  //GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  //GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   APP_SESSION_SECRET: process.env.APP_SESSION_SECRET,
+  REFRESH_TOKEN: process.env.REFRESH_TOKEN,
 };
